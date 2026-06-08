@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A. Hassan — Project Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F3EF;--bg2:#FFFFFF;--bg3:#F0EDE8;--bg4:#E8E4DC;
+  --surface:#FFFFFF;--border:#E2DDD6;--border2:#C8C0B4;
+  --gold:#B07D2E;--gold2:#C9963C;--gold-light:#FBF5E8;--gold-mid:rgba(176,125,46,0.15);
+  --text:#1A1714;--text2:#5C544A;--text3:#9E9388;
+  --blue:#2563EB;--blue-bg:#EFF6FF;--blue-border:#BFDBFE;
+  --green:#059669;--green-bg:#ECFDF5;--green-border:#A7F3D0;
+  --amber:#D97706;--amber-bg:#FFFBEB;--amber-border:#FDE68A;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
+  --purple:#7C3AED;--purple-bg:#F5F3FF;--purple-border:#DDD6FE;
+  --gray:#6B7280;--gray-bg:#F9FAFB;--gray-border:#E5E7EB;
+  --r:10px;--r-lg:14px;--r-xl:18px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 6px rgba(0,0,0,0.05),0 10px 30px rgba(0,0,0,0.08);
+  --shadow-xl:0 20px 60px rgba(0,0,0,0.14);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:14px}
+
+/* HEADER */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:200;box-shadow:0 1px 0 var(--border),0 2px 8px rgba(0,0,0,0.04)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:36px;height:36px;background:var(--gold);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Playfair Display',serif;font-size:16px;font-weight:600;box-shadow:0 2px 8px rgba(176,125,46,0.35)}
+.logo-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:var(--text);line-height:1.2}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-date{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+.hbtn{padding:7px 14px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text2);transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+.hbtn:hover{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+.hbtn.primary{background:var(--gold);color:#fff;border-color:var(--gold);box-shadow:0 2px 8px rgba(176,125,46,0.3)}
+.hbtn.primary:hover{background:#9A6D24}
+
+/* NAV */
+.nav-tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2px}
+.nav-tab{padding:11px 16px;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:6px;margin-bottom:-1px;user-select:none}
+.nav-tab:hover{color:var(--text2)}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-tab svg{width:14px;height:14px;flex-shrink:0}
+
+/* MAIN */
+.main{padding:2rem;max-width:1600px;margin:0 auto}
+.section-label{font-size:10px;font-weight:600;letter-spacing:1.4px;color:var(--text3);text-transform:uppercase;margin-bottom:.9rem}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:2rem}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.1rem 1.25rem;box-shadow:var(--shadow);transition:all .2s;position:relative;overflow:hidden}
+.kpi-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.kpi-gold::after{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.kpi-blue::after{background:linear-gradient(90deg,var(--blue),#60A5FA)}
+.kpi-green::after{background:linear-gradient(90deg,var(--green),#34D399)}
+.kpi-amber::after{background:linear-gradient(90deg,var(--amber),#FCD34D)}
+.kpi-red::after{background:linear-gradient(90deg,var(--red),#F87171)}
+.kpi-purple::after{background:linear-gradient(90deg,var(--purple),#A78BFA)}
+.kpi-label{font-size:11px;color:var(--text3);margin-bottom:6px}
+.kpi-val{font-size:28px;font-weight:300;letter-spacing:-1.5px;font-family:'Playfair Display',serif}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* CHARTS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr 1fr 1.6fr;gap:14px;margin-bottom:2rem}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;box-shadow:var(--shadow)}
+.chart-card h4{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:1rem}
+.donut-wrap{display:flex;align-items:center;gap:12px}
+.donut-legend{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:11px}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.leg-lbl{color:var(--text2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.leg-val{color:var(--text);font-weight:600;font-family:'DM Mono',monospace;font-size:11px}
+.bar-chart{display:flex;flex-direction:column;gap:7px}
+.bar-item{display:grid;grid-template-columns:75px 1fr 36px;align-items:center;gap:8px;font-size:11px}
+.bar-lbl{color:var(--text2);text-align:right;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .7s ease}
+.bar-num{color:var(--text3);font-family:'DM Mono',monospace;font-size:10px}
+
+/* CONTROLS */
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.search-wrap{position:relative;flex:1;min-width:220px}
+.search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
+input[type=text],select,textarea{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;border-radius:var(--r);padding:8px 12px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,125,46,0.1)}
+input.s-inp{padding-left:36px}
+select{cursor:pointer;appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239E9388' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+.btn-gold{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(176,125,46,0.25)}
+.btn-gold:hover{background:#9A6D24}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn-outline:hover{background:var(--gold-light)}
+.btn-ghost{background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+
+/* CHIPS */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.chip{padding:5px 14px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--text2);transition:all .18s;user-select:none}
+.chip:hover{border-color:var(--border2);color:var(--text)}
+.chip.active{background:var(--gold-light);border-color:var(--gold);color:var(--gold)}
+.chip .cnt{opacity:.55;margin-left:2px}
+
+/* VIEW TOGGLE */
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.vbtn{padding:7px 12px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;transition:all .18s;display:flex;align-items:center;gap:5px}
+.vbtn.active{background:var(--gold);color:#fff}
+.vbtn:not(.active):hover{background:var(--bg3);color:var(--text)}
+
+/* RESULT INFO */
+.result-info{font-size:12px;color:var(--text3);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.result-info b{color:var(--text2)}
+
+/* CARD GRID */
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+
+/* PROJECT CARD */
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.project-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--border2)}
+.s-ongoing::before{background:linear-gradient(90deg,#2563EB,#60A5FA)}
+.s-completed::before{background:linear-gradient(90deg,#059669,#34D399)}
+.s-on-hold::before{background:linear-gradient(90deg,#D97706,#FCD34D)}
+.s-not-started::before{background:linear-gradient(90deg,#7C3AED,#A78BFA)}
+.s-closed::before{background:linear-gradient(90deg,#6B7280,#9CA3AF)}
+
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.card-meta{flex:1;min-width:0}
+.card-no{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ctag{background:var(--bg3);color:var(--text2);padding:1px 7px;border-radius:4px;font-size:10px;border:1px solid var(--border);font-family:'DM Sans',sans-serif}
+.card-name{font-size:13px;font-weight:500;line-height:1.4;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sbadge{flex-shrink:0;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;border:1px solid}
+.sb-ONGOING{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border)}
+.sb-COMPLETED{background:var(--green-bg);color:var(--green);border-color:var(--green-border)}
+.sb-ON-HOLD{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)}
+.sb-NOT-YET-STARTED{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-border)}
+.sb-CLOSED{background:var(--gray-bg);color:var(--gray);border-color:var(--gray-border)}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:14px}
+.prog-head{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px}
+.prog-lbl{color:var(--text3)}
+.prog-pct{color:var(--text);font-family:'DM Mono',monospace;font-size:12px;font-weight:500}
+.prog-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* CARD DETAILS */
+.card-details{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:10px}
+.d-key{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.d-val{font-size:12px;color:var(--text2);font-weight:500}
+.tpill{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.type-D{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
+.type-S{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.card-notes{font-size:11.5px;color:var(--text3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-style:italic}
+.card-notes.upd{color:var(--gold);font-style:normal}
+.card-footer{margin-top:10px;display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px dashed var(--border)}
+.c-fees{font-size:11px;color:var(--text3)}
+.c-fees b{color:var(--text);font-family:'DM Mono',monospace;font-size:12px}
+.c-unpaid{font-size:11px;font-weight:500}
+.u-warn{color:var(--red)}.u-ok{color:var(--green)}
+.udot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;margin-left:5px;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* LIST VIEW */
+.project-list{display:none;flex-direction:column;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.l-head{display:grid;grid-template-columns:36px 110px 1fr 95px 80px 90px 100px 90px;gap:10px;padding:9px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px}
+.l-row{display:grid;grid-template-columns:36px 110px 1fr 95px 80px 90px 100px 90px;gap:10px;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:12px;cursor:pointer;transition:background .15s;align-items:center}
+.l-row:last-child{border-bottom:none}
+.l-row:hover{background:var(--bg3)}
+.l-sn{font-family:'DM Mono',monospace;color:var(--text3);font-size:11px}
+.l-no{font-family:'DM Mono',monospace;color:var(--text2);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.l-name{color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.l-client{color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:3px}
+.mini-fill{height:100%;border-radius:2px}
+.l-pct{font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
+.l-fees{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);text-align:right}
+.l-unpaid{font-family:'DM Mono',monospace;font-size:11px;text-align:right}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(26,23,20,0.5);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-xl);width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-xl);animation:m-in .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes m-in{from{transform:translateY(20px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.m-head{padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.m-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:500;color:var(--text)}
+.m-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.m-close{width:30px;height:30px;background:var(--bg3);border:1px solid var(--border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px;line-height:1;transition:all .18s;flex-shrink:0}
+.m-close:hover{background:var(--bg4);color:var(--text)}
+.m-body{padding:1.5rem 1.75rem;display:flex;flex-direction:column;gap:1rem}
+.m-foot{padding:1.25rem 1.75rem;border-top:1px solid var(--border);display:flex;gap:10px}
+.m-foot .btn{flex:1;justify-content:center;padding:11px}
+.flabel{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block;font-weight:600}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* SLIDER */
+.sl-wrap{display:flex;align-items:center;gap:12px}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:5px;background:var(--bg3);border-radius:3px;outline:none;cursor:pointer;border:none;padding:0;box-shadow:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(176,125,46,0.4);transition:transform .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.sl-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--gold);min-width:44px;text-align:right}
+
+/* REPORT */
+.report-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1.5rem}
+.report-panel h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:500;margin-bottom:.5rem;color:var(--text)}
+
+/* CHAT */
+.chat-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;height:460px}
+.chat-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--gold-light)}
+.chat-av{width:34px;height:34px;background:var(--gold);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.55}
+.msg-user{background:var(--gold);color:#fff;border-radius:12px 12px 2px 12px;align-self:flex-end}
+.msg-ai{background:var(--bg3);color:var(--text);border-radius:12px 12px 12px 2px;align-self:flex-start;border:1px solid var(--border)}
+.msg-ai b,.msg-ai strong{color:var(--gold2)}
+.chat-inp-row{padding:.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--bg)}
+.chat-txt{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;background:var(--bg2);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.chat-txt:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,125,46,0.1)}
+.chat-send{padding:9px 16px;background:var(--gold);color:#fff;border:none;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;transition:all .18s;font-family:'DM Sans',sans-serif}
+.chat-send:hover{background:#9A6D24}
+.qchips{display:flex;gap:6px;flex-wrap:wrap;padding:.6rem 1rem;border-top:1px solid var(--border);background:var(--bg)}
+.qchip{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--gold-mid);background:var(--gold-light);color:var(--gold);transition:all .18s;user-select:none}
+.qchip:hover{background:var(--gold);color:#fff}
+.typing{display:flex;gap:4px;align-items:center;padding:12px 14px}
+.typing span{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typ .8s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes typ{0%,80%,100%{transform:scale(0.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* TABS */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* EMPTY */
+.empty{text-align:center;padding:4rem 2rem;color:var(--text3);grid-column:1/-1}
+.empty-ico{font-size:40px;margin-bottom:1rem}
+.empty h3{font-size:16px;color:var(--text2);margin-bottom:6px}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-lg);padding:1rem 1.25rem;font-size:13px;color:var(--text);z-index:9999;display:none;animation:t-in .3s ease;box-shadow:var(--shadow-lg);min-width:220px}
+.toast.show{display:block}
+@keyframes t-in{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+.t-title{font-weight:600;margin-bottom:2px;color:var(--gold)}
+.t-msg{font-size:12px;color:var(--text3)}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border2)}
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+
+@media(max-width:900px){
+  .chart-row{grid-template-columns:1fr 1fr}
+  .chart-card:last-child{grid-column:span 2}
+}
+@media(max-width:640px){
+  .main{padding:1rem}.kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .project-grid{grid-template-columns:1fr}.frow{grid-template-columns:1fr}
+  .header{padding:0 1rem}.l-head,.l-row{grid-template-columns:80px 1fr 75px 70px}
+  .l-head>*:nth-child(n+5),.l-row>*:nth-child(n+5){display:none}
+  .nav-tabs{padding:0 1rem;overflow-x:auto;gap:0}
+  .header-date{display:none}
+  .chat-panel{height:380px}
+}
+@media print{
+  .header,.nav-tabs,.controls,.chips,.result-info,.view-toggle,.btn,.hbtn,
+  .chat-panel,.qchips{display:none!important}
+  body{background:#fff}.project-card{break-inside:avoid;box-shadow:none}
+  .project-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div><div class="logo-name">A. Hassan</div><div class="logo-sub">Project Portfolio</div></div>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="hDate"></div>
+    <button class="hbtn" onclick="window.print()">🖨 Print</button>
+    <button class="hbtn" onclick="exportCSV()">⬇ Export</button>
+    <button class="hbtn" onclick="copyReport()">📋 Copy Report</button>
+    <button class="hbtn primary" onclick="openNew()">＋ New Project</button>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<nav class="nav-tabs">
+  <div class="nav-tab active" onclick="switchTab('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Dashboard
+  </div>
+  <div class="nav-tab" onclick="switchTab('projects',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Projects
+  </div>
+  <div class="nav-tab" onclick="switchTab('reports',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Reports
+  </div>
+  <div class="nav-tab" onclick="switchTab('chat',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    AI Assistant
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<div id="tab-dashboard" class="tab-content active">
+  <div class="section-label">Portfolio Overview</div>
+  <div class="kpi-grid" id="kpiGrid"></div>
+  <div class="section-label">Analytics</div>
+  <div class="chart-row" id="chartRow"></div>
+</div>
+
+<!-- PROJECTS -->
+<div id="tab-projects" class="tab-content">
+  <div class="controls">
+    <div class="search-wrap">
+      <svg class="search-ico" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="s-inp" id="searchInput" placeholder="Search projects, clients, locations, notes…">
+    </div>
+    <select id="sortSel">
+      <option value="sn">Sort: Default</option>
+      <option value="pd">Progress ↓</option>
+      <option value="pa">Progress ↑</option>
+      <option value="nm">Name A–Z</option>
+      <option value="cl">Client A–Z</option>
+      <option value="fd">Fees ↓</option>
+      <option value="ud">Unpaid ↓</option>
+    </select>
+    <div class="view-toggle">
+      <button class="vbtn active" id="vCard" onclick="setView('card')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Cards
+      </button>
+      <button class="vbtn" id="vList" onclick="setView('list')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>List
+      </button>
+    </div>
+    <button class="btn btn-ghost" onclick="clearUpd()">↺ Reset</button>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="result-info">
+    <span>Showing <b id="cnt">0</b> projects</span>
+    <span id="updCnt" style="color:var(--gold)"></span>
+  </div>
+  <div class="project-grid" id="pgrid"></div>
+  <div class="project-list" id="plist">
+    <div class="l-head">
+      <div>#</div><div>Proj. No.</div><div>Project Name</div><div>Client</div>
+      <div>Progress</div><div>Status</div><div>Contract</div><div>Unpaid</div>
+    </div>
+    <div id="lbody"></div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div id="tab-reports" class="tab-content">
+  <div class="report-panel">
+    <h3>📋 Portfolio Status Report</h3>
+    <p style="font-size:13px;color:var(--text3);margin-bottom:1.5rem">Auto-generated · <span id="rDate"></span></p>
+    <div id="rContent"></div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-gold" onclick="window.print()">🖨 Print Report</button>
+    <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="btn btn-outline" onclick="copyReport()">📋 Copy Summary</button>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div id="tab-chat" class="tab-content">
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:1.5rem;align-items:start">
+    <div>
+      <div class="section-label" style="margin-bottom:.75rem">AI Project Assistant</div>
+      <div class="chat-panel">
+        <div class="chat-head">
+          <div class="chat-av">🤖</div>
+          <div>
+            <div style="font-weight:500;font-size:14px;color:var(--text)">Portfolio Assistant</div>
+            <div style="font-size:11px;color:var(--text3)">Powered by Claude · Knows all your projects</div>
+          </div>
+        </div>
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg msg-ai">👋 Hello! I have full visibility into your portfolio. Ask me anything — project status, unpaid invoices, deadlines, client summaries, or generate a daily briefing. What do you need?</div>
+        </div>
+        <div class="qchips" id="qchips">
+          <span class="qchip" onclick="sq('Which projects have unpaid invoices?')">⚠ Unpaid invoices</span>
+          <span class="qchip" onclick="sq('List all ongoing projects with progress')">🔵 Ongoing projects</span>
+          <span class="qchip" onclick="sq('What is the total portfolio value and breakdown?')">💰 Portfolio value</span>
+          <span class="qchip" onclick="sq('Give me a daily briefing for today')">☀️ Daily briefing</span>
+          <span class="qchip" onclick="sq('Which projects are behind schedule or on hold?')">⏱ On hold / delayed</span>
+          <span class="qchip" onclick="sq('Which projects are 90%+ and near completion?')">✅ Near completion</span>
+        </div>
+        <div class="chat-inp-row">
+          <input type="text" class="chat-txt" id="chatIn" placeholder="Ask about your projects…" onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-send" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:.75rem">Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-gold" style="justify-content:flex-start;padding:13px 16px;text-align:left" onclick="sq('Generate a full portfolio summary report with all key metrics')">📊 Full Portfolio Summary</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('Which projects need urgent attention this week? List them with actions required')">🚨 Urgent Items This Week</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('List all QF client projects, their status and current stage')">🏛 QF Client Report</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('Summarize all unpaid invoices and list who to follow up with for each')">💳 Collections Follow-up</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('List all MOFA projects and their current status')">🏢 MOFA Projects</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('What are the top 5 projects by contract value?')">🏆 Top Projects by Value</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('Which projects started in 2026 and what is their current status?')">📅 2026 New Projects</button>
+        <button class="btn btn-ghost" style="justify-content:flex-start;padding:13px 16px" onclick="sq('List all completed projects and any pending final payments')">✅ Completed Projects</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- UPDATE MODAL -->
+<div class="overlay" id="updOv" onclick="closeUpd(event)">
+  <div class="modal">
+    <div class="m-head">
+      <div><div class="m-title" id="updTitle">Update Project</div><div class="m-sub" id="updSub"></div></div>
+      <div class="m-close" onclick="closeUpdDirect()">×</div>
+    </div>
+    <div class="m-body" id="updBody"></div>
+    <div class="m-foot">
+      <button class="btn btn-gold" onclick="saveUpd()">✓ Save Update</button>
+      <button class="btn btn-ghost" onclick="closeUpdDirect()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW PROJECT MODAL -->
+<div class="overlay" id="newOv" onclick="closeNew(event)">
+  <div class="modal" style="max-width:660px">
+    <div class="m-head">
+      <div><div class="m-title">Add New Project</div><div class="m-sub">Create a new entry in your portfolio</div></div>
+      <div class="m-close" onclick="closeNewDirect()">×</div>
+    </div>
+    <div class="m-body">
+      <div class="frow">
+        <div><label class="flabel">Project No.</label><input type="text" id="n-no" placeholder="e.g. 1500-1"></div>
+        <div><label class="flabel">Client</label><input type="text" id="n-cl" placeholder="e.g. QF, MOFA"></div>
+      </div>
+      <div><label class="flabel">Project Name *</label><input type="text" id="n-nm" placeholder="Full project name"></div>
+      <div class="frow">
+        <div><label class="flabel">Location</label><input type="text" id="n-loc" placeholder="e.g. West Bay, Lusail"></div>
+        <div><label class="flabel">Type</label><select id="n-tp"><option value="D">D — Design</option><option value="S">S — Supervision</option></select></div>
+      </div>
+      <div class="frow">
+        <div><label class="flabel">Status</label><select id="n-st"><option value="ONGOING">Ongoing</option><option value="NOT YET STARTED">Not Yet Started</option><option value="ON-HOLD">On Hold</option><option value="COMPLETED">Completed</option><option value="CLOSED">Closed</option></select></div>
+        <div><label class="flabel">Stage</label><input type="text" id="n-sg" placeholder="e.g. DD, CD, Handing over"></div>
+      </div>
+      <div class="frow">
+        <div><label class="flabel">Fees Status</label><select id="n-fs"><option value="CONTRACTED">Contracted</option><option value="Non-Approved Offer">Non-Approved Offer</option><option value="COMPLEMENTARY">Complementary</option></select></div>
+        <div><label class="flabel">Duration (Months)</label><input type="text" id="n-du" placeholder="e.g. 6"></div>
+      </div>
+      <div class="frow">
+        <div><label class="flabel">Contract Fees (QAR)</label><input type="text" id="n-cf" placeholder="e.g. 150000"></div>
+        <div><label class="flabel">Monthly Fees (QAR)</label><input type="text" id="n-mf" placeholder="e.g. 25000"></div>
+      </div>
+      <div class="frow">
+        <div><label class="flabel">Actual Start</label><input type="text" id="n-as" placeholder="YYYY-MM-DD or TBD"></div>
+        <div><label class="flabel">Forecasted End</label><input type="text" id="n-fe" placeholder="YYYY-MM-DD or TBD"></div>
+      </div>
+      <div><label class="flabel">Progress (%)</label>
+        <div class="sl-wrap">
+          <input type="range" id="n-pr" min="0" max="100" value="0" oninput="document.getElementById('n-pv').textContent=this.value+'%'">
+          <div class="sl-val" id="n-pv">0%</div>
+        </div>
+      </div>
+      <div class="frow">
+        <div><label class="flabel">Unpaid Invoices (QAR)</label><input type="text" id="n-ui" placeholder="0"></div>
+        <div><label class="flabel">Remaining Fees (QAR)</label><input type="text" id="n-rf" placeholder="0"></div>
+      </div>
+      <div><label class="flabel">Notes & Actions</label><textarea id="n-na" placeholder="Notes, actions required, context…"></textarea></div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-gold" onclick="saveNew()">＋ Add Project</button>
+      <button class="btn btn-ghost" onclick="closeNewDirect()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="t-title" id="tTitle"></div><div class="t-msg" id="tMsg"></div></div>
+
+<script>
+const BASE = [{"id": 1, "projectNo": "232-2", "projectName": "New Qatar Embassy, Ambassador's Residence & Consulate Building, Canberra Australia", "location": "Australia", "client": "MOFA", "duration": 8.0, "actualStart": "2022-08-22", "forecastedEnd": "2026-09-01", "progress": 65, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 1600000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 1520000.0, "notesActions": "Concept Completed - Schematic ongoing (50%) - AOR appointment ongoing - to Submit payment (72% of Prelim. Des. Milestone)"}, {"id": 2, "projectNo": "232-2(S)", "projectName": "New Qatar Embassy - Canberra Australia (Supervision)", "location": "Australia", "client": "MOFA", "duration": 18.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 0, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 3000000.0, "monthlyFees": "166667", "status": "NOT YET STARTED", "unpaidInvoices": 0.0, "remainingFees": 3000000.0, "notesActions": ""}, {"id": 3, "projectNo": "479-30", "projectName": "Supervision For Sheikh Ali Bin Abdullah Al Thani Library (Awqaf)", "location": "Um Ghwailina", "client": "AWQAF", "duration": 36.0, "actualStart": "2026-04-15", "forecastedEnd": "2029-04-15", "progress": 0, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 3600000.0, "monthlyFees": "100000", "status": "NOT YET STARTED", "unpaidInvoices": 0.0, "remainingFees": 3600000.0, "notesActions": "Expected Start JUNE/2026 - IFC Package reviewed, BP almost issued - Pre-KickOff meeting 18/05/26"}, {"id": 4, "projectNo": "544-1-5-V1-V2(S)", "projectName": "Supervision: Student Recreation Room Courtyard 1 & 3 At Wcm-Q (Medbay)", "location": "QF", "client": "QF", "duration": 7.0, "actualStart": "2025-01-05", "forecastedEnd": "2025-12-31", "progress": 95, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 227584.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 38882.73, "remainingFees": 116488.87, "notesActions": "BCC process and Handover ongoing - EOT Request Sent, U/R by Tawseef"}, {"id": 5, "projectNo": "544-1-6", "projectName": "Eliminate Food Smell And Renovation Of Central Kitchen At Multaqa", "location": "QF", "client": "QF", "duration": 0.0, "actualStart": "", "forecastedEnd": "", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 0.0, "monthlyFees": "0", "status": "COMPLETED", "unpaidInvoices": 174625.0, "remainingFees": 0.0, "notesActions": "Pending 174,625 still unpaid - Haris to coordinate with Andei for a meeting to finalize."}, {"id": 6, "projectNo": "544-1-8", "projectName": "Supervision For Obtaining QCD Certification Of SB-2/FB-1,FB-2 And FB-3", "location": "QF", "client": "QF", "duration": 0, "actualStart": "", "forecastedEnd": "", "progress": 98, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 78969.12, "monthlyFees": "0", "status": "ON-HOLD", "unpaidInvoices": 15793.82, "remainingFees": 0.0, "notesActions": "On-hold till completion of struc. assessment - EOT issued/Approved 30/04/26"}, {"id": 7, "projectNo": "544-1-8(V1)", "projectName": "Structural Assessment For 4 Bldgs (FB 1,2,3 & SB 2) Lumpsum", "location": "QF", "client": "QF", "duration": 5.0, "actualStart": "2025-06-24", "forecastedEnd": "2026-03-15", "progress": 90, "feesStatus": "CONTRACTED", "type": "D", "stage": "Handing over", "contractFees": 188948.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 44000.0, "remainingFees": 94474.0, "notesActions": "EOT Request Sent, U/R by Tawseef - ACTS doing tests, complete by 10th May. Lab results ready by end of May."}, {"id": 8, "projectNo": "544-1-10(S)", "projectName": "Vivarium Fit-Out - Medbay (WCM-Q)", "location": "QF", "client": "QF", "duration": 6.0, "actualStart": "2025-07-20", "forecastedEnd": "2026-04-20", "progress": 90, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 257620.41, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 103048.16, "remainingFees": 154572.25, "notesActions": "LPO issued - 103,048 invoice uploaded (pay within 45 days) - EOT Approved by Andrei - Need to issue payment up to 80%"}, {"id": 9, "projectNo": "544-1-13(S)", "projectName": "Supervision - Qeeri And Qbri Optimization Project 2nd Rounds", "location": "QF", "client": "QF", "duration": 0, "actualStart": "", "forecastedEnd": "", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 0.0, "monthlyFees": "0", "status": "COMPLETED", "unpaidInvoices": 0.0, "remainingFees": 19395.81, "notesActions": "Works completed, Handover to city operation done - EOT Sent, U/R by Mahfooz"}, {"id": 10, "projectNo": "544-1-24(S)", "projectName": "Stables: Permanent Structure 10-12 Stalls - Al Shaqab", "location": "QF", "client": "QF", "duration": 7.0, "actualStart": "2024-12-15", "forecastedEnd": "2025-10-30", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 84416.75, "monthlyFees": "12060", "status": "COMPLETED", "unpaidInvoices": 10552.1, "remainingFees": 50650.04, "notesActions": "Work completed - Handover Done - EOT Sent, U/R by Tawseef"}, {"id": 11, "projectNo": "544-1-33(S)", "projectName": "Space Modifications Dean's Suite At Humanitarium (GUQ)", "location": "QF", "client": "QF", "duration": 5.0, "actualStart": "2025-02-17", "forecastedEnd": "2025-10-30", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 33994.9, "monthlyFees": "5400", "status": "COMPLETED", "unpaidInvoices": 0.0, "remainingFees": 30619.9, "notesActions": "Work completed - Handover Done - No QCD - EOT Sent, U/R by Mahfooz"}, {"id": 12, "projectNo": "544-1-34(S)", "projectName": "Fit-Out Shell Space 2F01 Second Floor GU-Q Building", "location": "QF", "client": "QF", "duration": 6.0, "actualStart": "2025-10-19", "forecastedEnd": "2026-04-19", "progress": 40, "feesStatus": "CONTRACTED", "type": "S", "stage": "2nd fix", "contractFees": 92237.85, "monthlyFees": "TBA", "status": "ONGOING", "unpaidInvoices": 6500.0, "remainingFees": 85737.85, "notesActions": "On hold due to HVAC design VO by Client - works resumed 15/04/2026 - EOT Sent, U/R by Mahfooz"}, {"id": 13, "projectNo": "544-1-35(S)", "projectName": "Gasification Plant Fit-Out Works, Green Islands 2", "location": "QF", "client": "QF", "duration": 9.0, "actualStart": "2024-10-07", "forecastedEnd": "2025-10-15", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 70233.46, "monthlyFees": "", "status": "COMPLETED", "unpaidInvoices": 14046.69, "remainingFees": 42140.08, "notesActions": "BCC uploaded 23rd FEB, comments received - EOT sent and approved by QF PM"}, {"id": 14, "projectNo": "544-1-43(S)", "projectName": "Upgrading MEP-LV Systems At Humanitarium (GU-Q)", "location": "QF", "client": "QF", "duration": 12.0, "actualStart": "2025-06-02", "forecastedEnd": "2026-05-31", "progress": 85, "feesStatus": "CONTRACTED", "type": "S", "stage": "final fix", "contractFees": 156000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 113100.0, "notesActions": "Works ongoing - contact QF PM to issue ICC (JA Expires 31/05/2026) - issue one more invoice during May."}, {"id": 15, "projectNo": "544-1-47(S)", "projectName": "CPR 7220193 Additional Works Kitchen Upgrade At GU-Q", "location": "QF", "client": "QF", "duration": 5.0, "actualStart": "2025-09-17", "forecastedEnd": "2026-02-12", "progress": 25, "feesStatus": "CONTRACTED", "type": "S", "stage": "1st fix", "contractFees": 57966.0, "monthlyFees": "TBA", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 57966.0, "notesActions": "On hold due to wrong design input by Client - Redesign done - will resume July/2026"}, {"id": 16, "projectNo": "544-1-58", "projectName": "Repurposing Computer Labs - Higher Education Practical Knowledge Lab At Multaqa", "location": "QF", "client": "QF", "duration": 2.0, "actualStart": "2025-07-23", "forecastedEnd": "2025-12-31", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 70200.0, "monthlyFees": "", "status": "COMPLETED", "unpaidInvoices": 46800.0, "remainingFees": 23400.0, "notesActions": "Fit out tender package submitted and awarded - EOT Sent, U/R by Khadija"}, {"id": 17, "projectNo": "544-1-58-V1", "projectName": "Repurposing Multaqa Computer Labs - AV Design", "location": "QF", "client": "QF", "duration": 1.0, "actualStart": "2025-09-04", "forecastedEnd": "2025-12-31", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 84000.0, "monthlyFees": "", "status": "COMPLETED", "unpaidInvoices": 0.0, "remainingFees": 42000.0, "notesActions": "AV system tender package submitted - EOT Sent, U/R by Khadija"}, {"id": 18, "projectNo": "544-1-61(D)", "projectName": "CSE Greenhouse At OTF (Researchery) - Design", "location": "QF", "client": "QF", "duration": 4.0, "actualStart": "2024-12-12", "forecastedEnd": "2025-04-08", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 12013.32, "monthlyFees": "", "status": "COMPLETED", "unpaidInvoices": 12013.32, "remainingFees": 0.0, "notesActions": "Design Completed - supervision ongoing - EOT Sent, U/R by Mahfooz. QF to issue ICC for un-paid invoice."}, {"id": 19, "projectNo": "544-1-61(S)", "projectName": "CSE Greenhouse At OTF (Researchery) - Supervision", "location": "QF", "client": "QF", "duration": 5.0, "actualStart": "2025-09-25", "forecastedEnd": "2026-02-11", "progress": 25, "feesStatus": "CONTRACTED", "type": "S", "stage": "1st fix", "contractFees": 18019.98, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 18019.98, "notesActions": "Started 25 Sep 2025 - on hold due to Client change - work resumed 15/04/2026"}, {"id": 20, "projectNo": "544-1-64+V1", "projectName": "Renovation Of IT Office Area At CMU-Q (Biznest) - Design", "location": "QF", "client": "QF", "duration": 3.0, "actualStart": "2025-01-19", "forecastedEnd": "2025-11-06", "progress": 95, "feesStatus": "CONTRACTED", "type": "D", "stage": "Handing over", "contractFees": 82830.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 76999.5, "remainingFees": 5830.5, "notesActions": "Design Completed - Tender package submitted - EOT sent and approved - follow up with QF to issue ICC"}, {"id": 21, "projectNo": "544-1-64(S)", "projectName": "Renovation Of IT Office Area At CMU-Q (Biznest) - Supervision", "location": "QF", "client": "QF", "duration": 0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 0, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 89700.0, "monthlyFees": "0", "status": "ON-HOLD", "unpaidInvoices": 0, "remainingFees": 89700.0, "notesActions": "Follow-up with PERVY & QF if TEC will supervise (Contract Expired) - ON-HOLD BY CLIENT"}, {"id": 22, "projectNo": "544-1-66", "projectName": "Multaqa Select Space Repurposing Store And Staff Room", "location": "QF", "client": "QF", "duration": 3.0, "actualStart": "2025-06-01", "forecastedEnd": "2025-12-31", "progress": 50, "feesStatus": "CONTRACTED", "type": "D", "stage": "second fix", "contractFees": 31500.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0, "remainingFees": 31500.0, "notesActions": "Design Completed, DC-1 ongoing - EOT sent, Sign the VO & return to QF."}, {"id": 23, "projectNo": "544-1-69", "projectName": "QCD Approval For Office Buildings SB-1 & 3 & MB-3 (Incl. Structural Assessment)", "location": "QF", "client": "QF", "duration": 8.0, "actualStart": "2025-05-29", "forecastedEnd": "2026-01-31", "progress": 90, "feesStatus": "CONTRACTED", "type": "D", "stage": "Handing over", "contractFees": 184604.25, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 54802.12, "remainingFees": 22500.0, "notesActions": "ACTS report received - Ahmed Samir preparing TEC Final report (3 weeks), then claim remaining fees (100%)"}, {"id": 24, "projectNo": "544-1-69(S)", "projectName": "Supervision QCD Approval For Office Buildings SB-1 & 3 & MB-3", "location": "QF", "client": "QF", "duration": 6.0, "actualStart": "2025-05-29", "forecastedEnd": "2026-03-01", "progress": 95, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 86747.82, "monthlyFees": "14450", "status": "ONGOING", "unpaidInvoices": 13012.17, "remainingFees": 47711.3, "notesActions": "Work almost completed - waiting to finalize structural assessment report for BCC process"}, {"id": 25, "projectNo": "699-12-V6", "projectName": "Supervision Fit-Out Commercial Building 3B+G+M+9 Plot BC-D-6 Lusail", "location": "Lusail", "client": "SHK. Abdul-Rahman", "duration": 0, "actualStart": "", "forecastedEnd": "TBA", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 0.0, "monthlyFees": "0", "status": "COMPLETED", "unpaidInvoices": 180000.0, "remainingFees": 0.0, "notesActions": "Physical Supervision completed - Follow up for remaining payments (Eng. Nabil & Finance Dept.)"}, {"id": 26, "projectNo": "699-27(S)", "projectName": "SHK Abdelrhman Farm Villa And Majlis Plot 1", "location": "Um Salal", "client": "SHK. Abdul-Rahman", "duration": 12.0, "actualStart": "TBD", "forecastedEnd": "2026-08-01", "progress": 60, "feesStatus": "COMPLEMENTARY", "type": "S", "stage": "skeleton", "contractFees": 0.0, "monthlyFees": "0", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "Started June 2025 - Complementary - supervision on-call basis"}, {"id": 27, "projectNo": "699-33", "projectName": "Design Of Majles (B+G+M) & Masjed (G) At Rawdat Egdaim - SHK Abdelrahman", "location": "Al-Rayyan", "client": "SHK. Abdul-Rahman", "duration": 2.0, "actualStart": "2025-05-01", "forecastedEnd": "2025-12-31", "progress": 80, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 300000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 220000.0, "remainingFees": 30000.0, "notesActions": "Design Physically Completed - Majlis BP almost Completed - Need to follow up on un-paid invoices"}, {"id": 28, "projectNo": "858-6", "projectName": "Ahli Bank Branch (Um Lekhba) Fit-Out Works - Design", "location": "Um Lakhba", "client": "Ahli Bank", "duration": 6.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 10, "feesStatus": "Non-Approved Offer", "type": "D", "stage": "CD", "contractFees": 75000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 75000.0, "notesActions": "Concept design submitted - need approved offer or signed contract - On-Hold till further update"}, {"id": 29, "projectNo": "858-6(S)", "projectName": "Ahli Bank Branch (Um Lekhba) Fit-Out - Supervision", "location": "Um Lakhba", "client": "Ahli Bank", "duration": 3.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 0, "feesStatus": "Non-Approved Offer", "type": "S", "stage": "", "contractFees": 90000.0, "monthlyFees": "30000", "status": "NOT YET STARTED", "unpaidInvoices": 0.0, "remainingFees": 90000.0, "notesActions": "need approved offer or signed contract"}, {"id": 30, "projectNo": "906-4(D)", "projectName": "Harley Davidson Showroom @Commercial Avenue - Design", "location": "Industrial Area", "client": "QAC/NBK", "duration": 0.0, "actualStart": "", "forecastedEnd": "", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 0.0, "monthlyFees": "", "status": "CLOSED", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "Retention received - project Closed"}, {"id": 31, "projectNo": "906-4(S)", "projectName": "Harley Davidson Showroom @Commercial Avenue - Supervision", "location": "Industrial Area", "client": "QAC/NBK", "duration": 3.0, "actualStart": "2025-09-01", "forecastedEnd": "2025-12-24", "progress": 100, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 64500.0, "monthlyFees": "21500", "status": "CLOSED", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "Works Completed - Authorities Handover done - All Fees collected - CLOSED"}, {"id": 32, "projectNo": "906-8", "projectName": "QAC Qatar Automobile Co. Refurbishment Project - Design", "location": "Salwa Road", "client": "QAC/NBK", "duration": 5.0, "actualStart": "2025-04-01", "forecastedEnd": "2025-08-31", "progress": 90, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 360000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 154500.0, "notesActions": "Tender Awarded - DC/1 Approved - BP issued - DC-2 still ongoing - Need to finalize DC-2 ASAP"}, {"id": 33, "projectNo": "906-8(S)", "projectName": "QAC Qatar Automobile Co. Refurbishment Project - Supervision", "location": "Salwa Road", "client": "QAC/NBK", "duration": 6.0, "actualStart": "2026-03-14", "forecastedEnd": "2026-07-31", "progress": 25, "feesStatus": "CONTRACTED", "type": "S", "stage": "2nd fix", "contractFees": 240000.0, "monthlyFees": "40000", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 200000.0, "notesActions": "Started 14/03/2026 - Need extensive visits to avoid client complaints"}, {"id": 34, "projectNo": "935-LSL-V9", "projectName": "Vodafone Office Update 19th and 23rd Floor - Design", "location": "Lusail", "client": "VODAFONE", "duration": 3.5, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 15, "feesStatus": "Non-Approved Offer", "type": "D", "stage": "", "contractFees": 135000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0, "remainingFees": 135000.0, "notesActions": "Concept submitted / waiting VF approval - On Hold till approved offer or contract"}, {"id": 35, "projectNo": "935-LSL-V9(S)", "projectName": "Vodafone Office Update 19th and 23rd Floor - Supervision", "location": "Lusail", "client": "VODAFONE", "duration": 4.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 0, "feesStatus": "Non-Approved Offer", "type": "S", "stage": "", "contractFees": 168000.0, "monthlyFees": "42000", "status": "NOT YET STARTED", "unpaidInvoices": 0, "remainingFees": 168000.0, "notesActions": "need approved offer or contract"}, {"id": 36, "projectNo": "MSH-V4/935-LSL-V10", "projectName": "Environmental Reports Smell Issues - 23rd FL Lusail & 5th FL Musheireb", "location": "Mushaireb", "client": "VODAFONE", "duration": 1.0, "actualStart": "2026-03-01", "forecastedEnd": "2026-03-31", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 5000.0, "monthlyFees": "", "status": "CLOSED", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "LPO provided - work completed - fees collected - CLOSED"}, {"id": 37, "projectNo": "979-2", "projectName": "Supervision & Partial Design Validation For Borooq Towers At Dafna", "location": "West Bay", "client": "Shk. Nayef Bin Sehem", "duration": 8.0, "actualStart": "2024-10-26", "forecastedEnd": "2026-07-31", "progress": 85, "feesStatus": "CONTRACTED", "type": "S", "stage": "final fix", "contractFees": 285000.0, "monthlyFees": "30000", "status": "ONGOING", "unpaidInvoices": 30000.0, "remainingFees": 60000.0, "notesActions": "Need to provide weekly status report - Handover fees LumpSum (45,000 QR)"}, {"id": 38, "projectNo": "979-2-V4", "projectName": "Fit-Out For Borooq Tower - DB Schedule Verification", "location": "West Bay", "client": "Shk. Nayef Bin Sehem", "duration": 2.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 50, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 20000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 10000.0, "remainingFees": 10000.0, "notesActions": "Data Collected from site - provided to design team for validation and Report"}, {"id": 39, "projectNo": "1035", "projectName": "Villa (G+1+Ph) Complex, Al Khor - Design", "location": "Al-Khor", "client": "Mahdi Al-Dosari", "duration": 2.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 75, "feesStatus": "", "type": "D", "stage": "CD", "contractFees": 30000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 30000.0, "notesActions": "Need to finalize the ID (support from M. Hesham), and claim the fees"}, {"id": 40, "projectNo": "1035(S)-V1", "projectName": "Villa (G+1+Ph) Complex, Al Khor - Supervision", "location": "Al-Khor", "client": "Mahdi Al-Dosari", "duration": 6.0, "actualStart": "2025-04-01", "forecastedEnd": "2025-12-31", "progress": 75, "feesStatus": "CONTRACTED", "type": "S", "stage": "FINISHES", "contractFees": 35000.0, "monthlyFees": "5000", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 30000.0, "notesActions": "Slow progress - need to conduct weekly visits to claim our invoices"}, {"id": 41, "projectNo": "1100-2", "projectName": "Design Services For Spa At JW Marriott - Level 4", "location": "West Bay", "client": "Unique Design", "duration": 2.0, "actualStart": "2025-10-05", "forecastedEnd": "2026-05-02", "progress": 80, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 90000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 27000.0, "remainingFees": 36000.0, "notesActions": "Project is Late - IFC fully submitted - DC-1 under process - need to follow up pending & unpaid invoices"}, {"id": 42, "projectNo": "1144-2", "projectName": "LAMAR Mixed Use Project - Commercial and Beach Resort (Libya)", "location": "Tripoli - Libya", "client": "Lamar Properties", "duration": 5.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 15, "feesStatus": "CONTRACTED", "type": "D", "stage": "CD", "contractFees": 328500.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0, "remainingFees": 0, "notesActions": "Concept design phase - On-Hold till further update"}, {"id": 43, "projectNo": "1256", "projectName": "Office 16th Floor City Tower, Doha Souq - Design - A'Amal Holding", "location": "West Bay - City Tower", "client": "A'AMAL Holding", "duration": 3.0, "actualStart": "2024-10-01", "forecastedEnd": "2025-03-31", "progress": 100, "feesStatus": "CONTRACTED", "type": "D", "stage": "", "contractFees": 140000.0, "monthlyFees": "", "status": "COMPLETED", "unpaidInvoices": 0.0, "remainingFees": 14000.0, "notesActions": "Design Completed - Need to issue invoice for remaining fees 10%, presenting BCC status"}, {"id": 44, "projectNo": "1256-V1 EOT(S)", "projectName": "Office 16th Floor City Tower - Supervision - A'Amal Holding", "location": "West Bay - City Tower", "client": "A'AMAL Holding", "duration": 3.0, "actualStart": "2025-04-15", "forecastedEnd": "2026-05-31", "progress": 98, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 0.0, "monthlyFees": "34000", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "Final T&C Ongoing - Expected completed & closed by 31/05/2026"}, {"id": 45, "projectNo": "1256-V2", "projectName": "Office 16th Floor City Tower - Modifications - A'Amal Holding", "location": "West Bay - City Tower", "client": "A'AMAL Holding", "duration": 3.0, "actualStart": "2026-05-15", "forecastedEnd": "2026-08-13", "progress": 25, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 25000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0, "remainingFees": 0, "notesActions": "Opening new file required urgently - system is blocked"}, {"id": 46, "projectNo": "1262-V1(D)", "projectName": "Design For New Contract Center For Government At Madinat Khalifa Building", "location": "Madinat Khalifa", "client": "Ma'lomatia", "duration": 3.0, "actualStart": "2025-10-01", "forecastedEnd": "2026-05-02", "progress": 80, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 185000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 74000.0, "notesActions": "Design almost completed - follow up on remaining payments - DC-1 under process // LATE"}, {"id": 47, "projectNo": "1262-V1(S)", "projectName": "Supervision For New Contract Center For Government At Madinat Khalifa Building", "location": "Madinat Khalifa", "client": "Ma'lomatia", "duration": 4.0, "actualStart": "2025-10-01", "forecastedEnd": "2025-12-31", "progress": 98, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 140000.0, "monthlyFees": "35000", "status": "ONGOING", "unpaidInvoices": 35000.0, "remainingFees": 0.0, "notesActions": "Almost Completed - Closure expected 31/05/2026 - Payment expected during May 2026"}, {"id": 48, "projectNo": "1403", "projectName": "Residential Villa Design Modifications - Markhiyah", "location": "Markhiyah", "client": "Nasser Darwish Fakhro", "duration": 2.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 100, "feesStatus": "COMPLEMENTARY", "type": "D", "stage": "", "contractFees": 0.0, "monthlyFees": "0", "status": "COMPLETED", "unpaidInvoices": 0.0, "remainingFees": 0.0, "notesActions": "Modifications approved by MMUP - Project Completed - need to open BCC file - To Be CLOSED"}, {"id": 49, "projectNo": "1403(S)", "projectName": "Residential Villa - Testing & Commissioning / BCC Scope - Markhiyah", "location": "Markhiyah", "client": "Nasser Darwish Fakhro", "duration": 1.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 10, "feesStatus": "CONTRACTED", "type": "S", "stage": "Handing over", "contractFees": 35000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 35000.0, "notesActions": "Opening BCC file - needs to be expedited."}, {"id": 50, "projectNo": "1438", "projectName": "Interior Design Services For Majlis - Crafters W.L.L.", "location": "Um Salal", "client": "CRAFTERS", "duration": 2.0, "actualStart": "2025-07-01", "forecastedEnd": "2026-04-01", "progress": 50, "feesStatus": "CONTRACTED", "type": "D", "stage": "DD", "contractFees": 113000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 42750.0, "notesActions": "Concept Approved - Need to deliver detailed design"}, {"id": 51, "projectNo": "1441-3", "projectName": "MCY Office Fit-Out Project - Design", "location": "Mesaimeer", "client": "MCY", "duration": 6.0, "actualStart": "2026-03-01", "forecastedEnd": "2026-08-31", "progress": 30, "feesStatus": "CONTRACTED", "type": "D", "stage": "CD", "contractFees": 215000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0, "remainingFees": 215000.0, "notesActions": "Started 01/03/2026 - 4 months Design + 2 months Tender - progress is late behind schedule"}, {"id": 52, "projectNo": "1441-3(S)", "projectName": "MCY Office Fit-Out Project - Supervision", "location": "Mesaimeer", "client": "MCY", "duration": 6.0, "actualStart": "2026-09-01", "forecastedEnd": "2027-03-01", "progress": 0, "feesStatus": "CONTRACTED", "type": "S", "stage": "", "contractFees": 225000.0, "monthlyFees": "45000", "status": "NOT YET STARTED", "unpaidInvoices": 0, "remainingFees": 225000.0, "notesActions": ""}, {"id": 53, "projectNo": "1452(D)", "projectName": "Planning & ID For Mezzanine Floor - Business Center (Nama Social Incubator)", "location": "Al-Sadd", "client": "NAMA", "duration": 2.0, "actualStart": "2026-03-01", "forecastedEnd": "2026-05-31", "progress": 10, "feesStatus": "CONTRACTED", "type": "D", "stage": "CD", "contractFees": 60000.0, "monthlyFees": "", "status": "ONGOING", "unpaidInvoices": 0.0, "remainingFees": 60000.0, "notesActions": "Design scope started 1/3/26 - Concept design ongoing - delays observed by client"}, {"id": 54, "projectNo": "1452(S)", "projectName": "Planning & ID For Mezzanine Floor - Business Center Supervision (Nama Social Incubator)", "location": "Al-Sadd", "client": "NAMA", "duration": 3.0, "actualStart": "TBD", "forecastedEnd": "TBD", "progress": 0, "feesStatus": "CONTRACTED", "type": "S", "stage": "NAS", "contractFees": 75000.0, "monthlyFees": "25000", "status": "NOT YET STARTED", "unpaidInvoices": 0.0, "remainingFees": 75000.0, "notesActions": "Not yet started"}];
+
+// STATE
+let updates={}, custom=[], editId=null, filter='ALL', sort='sn', search='', view='card', chatHist=[];
+const SC={'ONGOING':'s-ongoing','COMPLETED':'s-completed','ON-HOLD':'s-on-hold','NOT YET STARTED':'s-not-started','CLOSED':'s-closed'};
+const SCOL={'ONGOING':'#2563EB','COMPLETED':'#059669','ON-HOLD':'#D97706','NOT YET STARTED':'#7C3AED','CLOSED':'#6B7280'};
+
+function load(){
+  try{const d=JSON.parse(localStorage.getItem('aht4')||'{}');updates=d.u||{};custom=d.c||[];}catch(e){}
+}
+function persist(){
+  try{localStorage.setItem('aht4',JSON.stringify({u:updates,c:custom}));}catch(e){}
+}
+function all(){return[...BASE,...custom].map(p=>({...p,...(updates[p.id]||{})}))}
+function fmtQ(n){if(!n||n===0)return'—';if(n>=1e6)return'QAR '+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'QAR '+Math.round(n/1e3)+'K';return'QAR '+Math.round(n).toLocaleString();}
+function pc(p){if(p>=80)return'#059669';if(p>=50)return'#2563EB';if(p>=25)return'#D97706';return'#DC2626';}
+
+function init(){
+  load();
+  document.getElementById('hDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('rDate').textContent=new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'});
+  render(); rKPI(); rCharts(); rChips();
+  document.getElementById('searchInput').addEventListener('input',e=>{search=e.target.value;render();});
+  document.getElementById('sortSel').addEventListener('change',e=>{sort=e.target.value;render();});
+}
+
+// TABS
+function switchTab(name,el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+  if(name==='reports')rReport();
+}
+
+// KPI
+function rKPI(){
+  const a=all(),n=a.length;
+  const on=a.filter(p=>p.status==='ONGOING').length;
+  const done=a.filter(p=>['COMPLETED','CLOSED'].includes(p.status)).length;
+  const hold=a.filter(p=>p.status==='ON-HOLD').length;
+  const pend=a.filter(p=>p.status==='NOT YET STARTED').length;
+  const tf=a.reduce((s,p)=>s+(p.contractFees||0),0);
+  const tu=a.reduce((s,p)=>s+(p.unpaidInvoices||0),0);
+  const ap=Math.round(a.reduce((s,p)=>s+p.progress,0)/n);
+  const upd=Object.keys(updates).length;
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi-card kpi-gold"><div class="kpi-label">Total Projects</div><div class="kpi-val" style="color:var(--gold)">${n}</div><div class="kpi-sub">${upd} updated today</div></div>
+    <div class="kpi-card kpi-blue"><div class="kpi-label">Active / Ongoing</div><div class="kpi-val" style="color:var(--blue)">${on}</div><div class="kpi-sub">${Math.round(on/n*100)}% of portfolio</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-label">Completed + Closed</div><div class="kpi-val" style="color:var(--green)">${done}</div><div class="kpi-sub">${hold} on hold · ${pend} pending</div></div>
+    <div class="kpi-card kpi-amber"><div class="kpi-label">Avg Progress</div><div class="kpi-val" style="color:${pc(ap)}">${ap}%</div><div class="kpi-sub">across all projects</div></div>
+    <div class="kpi-card kpi-gold"><div class="kpi-label">Contract Portfolio</div><div class="kpi-val" style="color:var(--gold);font-size:22px">${fmtQ(tf)}</div><div class="kpi-sub">total contracted value</div></div>
+    <div class="kpi-card kpi-red"><div class="kpi-label">Unpaid Invoices</div><div class="kpi-val" style="color:${tu>0?'var(--red)':'var(--green)'};font-size:22px">${fmtQ(tu)}</div><div class="kpi-sub">pending collection</div></div>
+  `;
+}
+
+// CHARTS
+function rCharts(){
+  const a=all(),n=a.length;
+  const sts=['ONGOING','COMPLETED','CLOSED','ON-HOLD','NOT YET STARTED'];
+  const scnt=sts.map(s=>a.filter(p=>p.status===s).length);
+  const scol=[SCOL.ONGOING,SCOL.COMPLETED,'#9CA3AF',SCOL['ON-HOLD'],SCOL['NOT YET STARTED']];
+  const slbl=['Ongoing','Completed','Closed','On Hold','Pending'];
+  const cm={};a.forEach(p=>{const c=p.client||'Other';cm[c]=(cm[c]||0)+1;});
+  const tc=Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const mx=tc[0]?.[1]||1;
+  const pg=[a.filter(p=>p.progress===0).length,a.filter(p=>p.progress>0&&p.progress<50).length,a.filter(p=>p.progress>=50&&p.progress<80).length,a.filter(p=>p.progress>=80&&p.progress<100).length,a.filter(p=>p.progress===100).length];
+  const pgcol=['#DC2626','#D97706','#2563EB','#059669','#B07D2E'];
+  const pglbl=['Not started','1–49%','50–79%','80–99%','Complete'];
+
+  function donut(data,colors,sz=84){
+    const tot=data.reduce((a,b)=>a+b,0)||1;
+    let svg=`<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="flex-shrink:0">`;
+    const cx=sz/2,cy=sz/2,r=sz*.36,sw=sz*.19;
+    let ang=-Math.PI/2;
+    data.forEach((v,i)=>{
+      const pct=v/tot,sweep=pct*2*Math.PI;
+      if(sweep<.01)return;
+      const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
+      const x2=cx+r*Math.cos(ang+sweep),y2=cy+r*Math.sin(ang+sweep);
+      svg+=`<path d="M${cx} ${cy} L${x1.toFixed(2)} ${y1.toFixed(2)} A${r} ${r} 0 ${sweep>Math.PI?1:0} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z" fill="${colors[i]}"/>`;
+      ang+=sweep;
+    });
+    svg+=`<circle cx="${cx}" cy="${cy}" r="${(r-sw/2).toFixed(1)}" fill="white"/>`;
+    svg+=`<text x="${cx}" y="${cy+1}" text-anchor="middle" dominant-baseline="middle" font-size="${(sz*.16).toFixed(0)}" font-weight="600" fill="#1A1714" font-family="Playfair Display,serif">${tot}</text>`;
+    return svg+'</svg>';
+  }
+
+  const tf=a.reduce((s,p)=>s+(p.contractFees||0),0);
+  const tu=a.reduce((s,p)=>s+(p.unpaidInvoices||0),0);
+  const topU=a.filter(p=>p.unpaidInvoices>0).sort((a,b)=>b.unpaidInvoices-a.unpaidInvoices).slice(0,4);
+
+  document.getElementById('chartRow').innerHTML=`
+    <div class="chart-card">
+      <h4>Status Mix</h4>
+      <div class="donut-wrap">
+        ${donut(scnt,scol)}
+        <div class="donut-legend">
+          ${slbl.map((l,i)=>`<div class="leg-item"><div class="leg-dot" style="background:${scol[i]}"></div><span class="leg-lbl">${l}</span><span class="leg-val">${scnt[i]}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h4>Progress Distribution</h4>
+      <div class="bar-chart">
+        ${pglbl.map((l,i)=>`<div class="bar-item"><div class="bar-lbl">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${pg[i]/n*100}%;background:${pgcol[i]}"></div></div><div class="bar-num">${pg[i]}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="chart-card">
+      <h4>Top Clients</h4>
+      <div class="bar-chart">
+        ${tc.map(([c,v])=>`<div class="bar-item"><div class="bar-lbl">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${v/mx*100}%;background:var(--gold)"></div></div><div class="bar-num">${v}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="chart-card">
+      <h4>Financial Overview</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:var(--gold-light);padding:10px;border-radius:8px;border:1px solid var(--gold-mid)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Portfolio Value</div><div style="font-size:15px;font-weight:600;color:var(--gold);font-family:'DM Mono',monospace">${fmtQ(tf)}</div></div>
+        <div style="background:var(--red-bg);padding:10px;border-radius:8px;border:1px solid var(--red-border)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Total Unpaid</div><div style="font-size:15px;font-weight:600;color:var(--red);font-family:'DM Mono',monospace">${fmtQ(tu)}</div></div>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Top Unpaid</div>
+      ${topU.map(p=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px">${p.projectNo} · ${p.client}</span><span style="color:var(--red);font-family:'DM Mono',monospace;font-size:11px;flex-shrink:0;margin-left:6px">${fmtQ(p.unpaidInvoices)}</span></div>`).join('')}
+    </div>
+  `;
+}
+
+// CHIPS
+function rChips(){
+  const a=all();
+  const stats=['ALL','ONGOING','COMPLETED','ON-HOLD','NOT YET STARTED','CLOSED'];
+  const lbl={'ALL':'All','ONGOING':'Ongoing','COMPLETED':'Completed','ON-HOLD':'On Hold','NOT YET STARTED':'Pending','CLOSED':'Closed'};
+  document.getElementById('chips').innerHTML=stats.map(s=>`<button class="chip${filter===s?' active':''}" onclick="setFilter('${s}')">${lbl[s]} <span class="cnt">${s==='ALL'?a.length:a.filter(p=>p.status===s).length}</span></button>`).join('');
+}
+function setFilter(f){filter=f;rChips();render();}
+
+// VIEW
+function setView(v){
+  view=v;
+  document.getElementById('vCard').classList.toggle('active',v==='card');
+  document.getElementById('vList').classList.toggle('active',v==='list');
+  document.getElementById('pgrid').style.display=v==='card'?'grid':'none';
+  document.getElementById('plist').style.display=v==='list'?'flex':'none';
+  render();
+}
+
+// FILTERED LIST
+function filtered(){
+  let list=all();
+  if(filter!=='ALL')list=list.filter(p=>p.status===filter);
+  if(search){const q=search.toLowerCase();list=list.filter(p=>(p.projectName+p.projectNo+p.client+p.location+(p.notesActions||'')).toLowerCase().includes(q));}
+  const sf={sn:(a,b)=>a.id-b.id,pd:(a,b)=>b.progress-a.progress,pa:(a,b)=>a.progress-b.progress,nm:(a,b)=>a.projectName.localeCompare(b.projectName),cl:(a,b)=>a.client.localeCompare(b.client),fd:(a,b)=>b.contractFees-a.contractFees,ud:(a,b)=>b.unpaidInvoices-a.unpaidInvoices};
+  list.sort(sf[sort]||sf.sn);
+  return list;
+}
+
+// RENDER
+function render(){
+  const list=filtered();
+  document.getElementById('cnt').textContent=list.length;
+  const upd=Object.keys(updates).length;
+  document.getElementById('updCnt').textContent=upd>0?upd+' projects updated today':'';
+  if(view==='card'){
+    if(!list.length){document.getElementById('pgrid').innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><h3>No projects found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
+    document.getElementById('pgrid').innerHTML=list.map(p=>{
+      const iu=!!updates[p.id],hu=p.unpaidInvoices>0,sl=p.status==='NOT YET STARTED'?'PENDING':p.status;
+      return `<div class="project-card ${SC[p.status]||'s-closed'}" onclick="openUpd(${p.id})">
+        <div class="card-head">
+          <div class="card-meta">
+            <div class="card-no">${p.projectNo}<span class="ctag">${p.client}</span>${iu?'<span class="udot"></span>':''}</div>
+            <div class="card-name">${p.projectName}</div>
+          </div>
+          <div class="sbadge sb-${p.status.replace(/\s/g,'-')}">${sl}</div>
+        </div>
+        <div class="prog-wrap">
+          <div class="prog-head"><span class="prog-lbl">Progress</span><span class="prog-pct">${p.progress}%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:${p.progress}%;background:${pc(p.progress)}"></div></div>
+        </div>
+        <div class="card-details">
+          <div><div class="d-key">Location</div><div class="d-val">${p.location||'—'}</div></div>
+          <div><div class="d-key">Type / Stage</div><div class="d-val"><span class="tpill type-${p.type}">${p.type||'—'}</span>${p.stage?' · '+p.stage:''}</div></div>
+          <div><div class="d-key">Fees Status</div><div class="d-val">${p.feesStatus||'—'}</div></div>
+          <div><div class="d-key">Duration</div><div class="d-val">${p.duration?p.duration+' mo.':'TBD'}</div></div>
+        </div>
+        <div class="card-notes${iu?' upd':''}">${p.notesActions||'No notes yet.'}</div>
+        <div class="card-footer">
+          <div class="c-fees">Contract: <b>${fmtQ(p.contractFees)}</b></div>
+          <div class="c-unpaid ${hu?'u-warn':'u-ok'}">${hu?'⚠ '+fmtQ(p.unpaidInvoices)+' unpaid':p.remainingFees>0?fmtQ(p.remainingFees)+' remaining':'✓ Settled'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('lbody').innerHTML=list.map((p,i)=>{
+      const sl=p.status==='NOT YET STARTED'?'PENDING':p.status;
+      return `<div class="l-row" onclick="openUpd(${p.id})">
+        <div class="l-sn">${i+1}</div>
+        <div class="l-no">${p.projectNo}</div>
+        <div class="l-name">${p.projectName}</div>
+        <div class="l-client">${p.client}</div>
+        <div><div style="display:flex;align-items:center;gap:5px"><span class="l-pct" style="color:${pc(p.progress)}">${p.progress}%</span></div><div class="mini-bar"><div class="mini-fill" style="width:${p.progress}%;background:${pc(p.progress)}"></div></div></div>
+        <div><span class="sbadge sb-${p.status.replace(/\s/g,'-')}" style="font-size:9px;padding:2px 8px">${sl}</span></div>
+        <div class="l-fees">${fmtQ(p.contractFees)}</div>
+        <div class="l-unpaid" style="color:${p.unpaidInvoices>0?'var(--red)':'var(--text3)'}">${p.unpaidInvoices>0?fmtQ(p.unpaidInvoices):'—'}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// UPDATE MODAL
+function openUpd(id){
+  editId=id;
+  const p=all().find(x=>x.id===id);
+  document.getElementById('updTitle').textContent=p.projectNo;
+  document.getElementById('updSub').textContent=p.projectName;
+  document.getElementById('updBody').innerHTML=`
+    <div><label class="flabel">Progress</label>
+      <div class="sl-wrap">
+        <input type="range" id="ep" min="0" max="100" value="${p.progress}" oninput="document.getElementById('epv').textContent=this.value+'%'">
+        <div class="sl-val" id="epv">${p.progress}%</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div><label class="flabel">Status</label><select id="es">${['ONGOING','COMPLETED','ON-HOLD','NOT YET STARTED','CLOSED'].map(s=>`<option${p.status===s?' selected':''}>${s}</option>`).join('')}</select></div>
+      <div><label class="flabel">Stage</label><input type="text" id="est" value="${p.stage||''}" placeholder="e.g. DD, CD, Handing over"></div>
+    </div>
+    <div><label class="flabel">Notes & Actions</label><textarea id="en" style="min-height:110px">${p.notesActions||''}</textarea></div>
+    <div class="frow">
+      <div><label class="flabel">Forecasted End</label><input type="text" id="ee" value="${p.forecastedEnd||''}" placeholder="YYYY-MM-DD or TBD"></div>
+      <div><label class="flabel">Unpaid Invoices (QAR)</label><input type="text" id="eu" value="${p.unpaidInvoices||0}"></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);padding:8px 12px;background:var(--bg3);border-radius:8px">
+      <b style="color:var(--text2)">Last saved:</b> ${updates[id]?._at||'Not yet updated this session'}
+    </div>
+  `;
+  document.getElementById('updOv').classList.add('open');
+}
+function closeUpd(e){if(e.target===document.getElementById('updOv'))closeUpdDirect();}
+function closeUpdDirect(){document.getElementById('updOv').classList.remove('open');editId=null;}
+function saveUpd(){
+  if(!editId)return;
+  updates[editId]={progress:parseInt(document.getElementById('ep').value),status:document.getElementById('es').value,stage:document.getElementById('est').value,notesActions:document.getElementById('en').value,forecastedEnd:document.getElementById('ee').value,unpaidInvoices:parseFloat(document.getElementById('eu').value)||0,_at:new Date().toLocaleString('en-GB')};
+  persist();closeUpdDirect();rKPI();rCharts();rChips();render();
+  toast('✓ Saved','Project updated successfully');
+}
+
+// NEW PROJECT
+function openNew(){document.getElementById('newOv').classList.add('open');}
+function closeNew(e){if(e.target===document.getElementById('newOv'))closeNewDirect();}
+function closeNewDirect(){document.getElementById('newOv').classList.remove('open');}
+function saveNew(){
+  const nm=document.getElementById('n-nm').value.trim();
+  if(!nm){alert('Project name is required.');return;}
+  const newId=Math.max(...all().map(p=>p.id),54)+1;
+  custom.push({id:newId,projectNo:document.getElementById('n-no').value.trim()||'NEW-'+newId,projectName:nm,location:document.getElementById('n-loc').value.trim(),client:document.getElementById('n-cl').value.trim(),pd:'A.HASSAN',duration:parseFloat(document.getElementById('n-du').value)||0,actualStart:document.getElementById('n-as').value.trim()||'TBD',forecastedEnd:document.getElementById('n-fe').value.trim()||'TBD',progress:parseInt(document.getElementById('n-pr').value)||0,feesStatus:document.getElementById('n-fs').value,type:document.getElementById('n-tp').value,stage:document.getElementById('n-sg').value.trim(),contractFees:parseFloat(document.getElementById('n-cf').value)||0,monthlyFees:document.getElementById('n-mf').value.trim(),status:document.getElementById('n-st').value,unpaidInvoices:parseFloat(document.getElementById('n-ui').value)||0,remainingFees:parseFloat(document.getElementById('n-rf').value)||0,notesActions:document.getElementById('n-na').value.trim()});
+  persist();closeNewDirect();rKPI();rCharts();rChips();render();
+  toast('✓ Project Added','#'+newId+' · '+nm.slice(0,40));
+  switchTab('projects',document.querySelectorAll('.nav-tab')[1]);
+}
+
+// REPORT
+function rReport(){
+  const a=all();
+  const on=a.filter(p=>p.status==='ONGOING');
+  const un=a.filter(p=>p.unpaidInvoices>0).sort((a,b)=>b.unpaidInvoices-a.unpaidInvoices);
+  const nc=a.filter(p=>p.progress>=90&&p.status==='ONGOING').sort((a,b)=>b.progress-a.progress);
+  const tf=a.reduce((s,p)=>s+(p.contractFees||0),0);
+  const tu=a.reduce((s,p)=>s+(p.unpaidInvoices||0),0);
+  const row=(p,i,cols)=>`<tr style="border-top:1px solid var(--border);background:${i%2?'var(--bg)':'white'}">${cols.map(c=>`<td style="padding:7px 10px;${c.s||''}">${c.v(p)}</td>`).join('')}</tr>`;
+  const th=cols=>`<tr style="background:var(--bg3)">${cols.map(c=>`<th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;${c.s||''}">${c.h}</th>`).join('')}</tr>`;
+  document.getElementById('rContent').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem">
+      <div style="background:var(--bg3);padding:10px 14px;border-radius:8px"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Total</div><b style="font-size:18px;color:var(--text)">${a.length}</b></div>
+      <div style="background:var(--blue-bg);padding:10px 14px;border-radius:8px;border:1px solid var(--blue-border)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Ongoing</div><b style="font-size:18px;color:var(--blue)">${on.length}</b></div>
+      <div style="background:var(--green-bg);padding:10px 14px;border-radius:8px;border:1px solid var(--green-border)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Completed</div><b style="font-size:18px;color:var(--green)">${a.filter(p=>p.status==='COMPLETED').length}</b></div>
+      <div style="background:var(--amber-bg);padding:10px 14px;border-radius:8px;border:1px solid var(--amber-border)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">On Hold</div><b style="font-size:18px;color:var(--amber)">${a.filter(p=>p.status==='ON-HOLD').length}</b></div>
+      <div style="background:var(--gold-light);padding:10px 14px;border-radius:8px;border:1px solid var(--gold-mid)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Portfolio</div><b style="font-size:15px;color:var(--gold);font-family:'DM Mono',monospace">${fmtQ(tf)}</b></div>
+      <div style="background:var(--red-bg);padding:10px 14px;border-radius:8px;border:1px solid var(--red-border)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Unpaid</div><b style="font-size:15px;color:var(--red);font-family:'DM Mono',monospace">${fmtQ(tu)}</b></div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:0 0 .5rem">✅ Near Completion (90%+)</div>
+    <div style="overflow-x:auto;margin-bottom:1.5rem"><table style="width:100%;border-collapse:collapse;font-size:12px">${th([{h:'Project No.'},{h:'Project Name'},{h:'Client'},{h:'Progress',s:'text-align:center'},{h:'Stage'},{h:'End Date'},{h:'Notes'}])}${nc.map((p,i)=>row(p,i,[{v:p=>`<span style="font-family:'DM Mono',monospace;font-size:11px">${p.projectNo}</span>`},{v:p=>`<b style="color:var(--text)">${p.projectName.slice(0,50)}${p.projectName.length>50?'…':''}</b>`},{v:p=>p.client},{v:p=>`<span style="color:${pc(p.progress)};font-weight:700;font-family:'DM Mono',monospace">${p.progress}%</span>`,s:'text-align:center'},{v:p=>p.stage||'—'},{v:p=>p.forecastedEnd||'—'},{v:p=>`<span style="color:var(--text3)">${(p.notesActions||'').slice(0,60)}</span>`}])).join('')}</table></div>
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:0 0 .5rem">⚠ Outstanding Unpaid Invoices</div>
+    <div style="overflow-x:auto;margin-bottom:1.5rem"><table style="width:100%;border-collapse:collapse;font-size:12px">${th([{h:'Project No.'},{h:'Project Name'},{h:'Client'},{h:'Unpaid (QAR)',s:'text-align:right'},{h:'Status'},{h:'Action / Notes'}])}${un.slice(0,12).map((p,i)=>row(p,i,[{v:p=>`<span style="font-family:'DM Mono',monospace;font-size:11px">${p.projectNo}</span>`},{v:p=>`<b style="color:var(--text)">${p.projectName.slice(0,45)}${p.projectName.length>45?'…':''}</b>`},{v:p=>p.client},{v:p=>`<b style="color:var(--red);font-family:'DM Mono',monospace">${fmtQ(p.unpaidInvoices)}</b>`,s:'text-align:right'},{v:p=>`<span class="sbadge sb-${p.status.replace(/\s/g,'-')}" style="font-size:9px;padding:2px 8px">${p.status}</span>`},{v:p=>`<span style="color:var(--text3)">${(p.notesActions||'').slice(0,60)}</span>`}])).join('')}</table></div>
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:0 0 .5rem">📋 All Ongoing Projects</div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">${th([{h:'#'},{h:'Project No.'},{h:'Project Name'},{h:'Client'},{h:'Type'},{h:'Stage'},{h:'Progress',s:'text-align:center'},{h:'Contract',s:'text-align:right'}])}${on.map((p,i)=>row(p,i,[{v:(p,i)=>`<span style="color:var(--text3);font-family:'DM Mono',monospace;font-size:11px">${i+1}</span>`},{v:p=>`<span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${p.projectNo}</span>`},{v:p=>`<b style="color:var(--text)">${p.projectName.slice(0,50)}${p.projectName.length>50?'…':''}</b>`},{v:p=>p.client},{v:p=>`<span class="tpill type-${p.type}" style="font-size:10px">${p.type}</span>`},{v:p=>p.stage||'—'},{v:p=>`<span style="color:${pc(p.progress)};font-weight:700;font-family:'DM Mono',monospace">${p.progress}%</span>`,s:'text-align:center'},{v:p=>`<span style="font-family:'DM Mono',monospace;font-size:11px">${fmtQ(p.contractFees)}</span>`,s:'text-align:right'}])).join('')}</table></div>
+  `;
+}
+
+// EXPORT
+function exportCSV(){
+  const a=all();
+  const rows=[['SN','Project No','Project Name','Client','Location','Type','Stage','Status','Progress','Contract Fees','Unpaid Invoices','Remaining Fees','Forecasted End','Notes & Actions','Last Updated']];
+  a.forEach(p=>rows.push([p.id,p.projectNo,`"${p.projectName}"`,p.client,p.location,p.type,p.stage||'',p.status,p.progress+'%',p.contractFees,p.unpaidInvoices,p.remainingFees,p.forecastedEnd||'',`"${(p.notesActions||'').replace(/"/g,"''")}"`,updates[p.id]?._at||'']));
+  const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'});
+  const a2=document.createElement('a');a2.href=URL.createObjectURL(blob);a2.download='AH_Portfolio_'+new Date().toISOString().slice(0,10)+'.csv';a2.click();
+}
+
+function copyReport(){
+  const a=all();
+  const tf=a.reduce((s,p)=>s+(p.contractFees||0),0);
+  const tu=a.reduce((s,p)=>s+(p.unpaidInvoices||0),0);
+  const txt=`A. HASSAN — PORTFOLIO SUMMARY — ${new Date().toLocaleDateString('en-GB')}\n${'='.repeat(50)}\nTotal Projects: ${a.length} | Ongoing: ${a.filter(p=>p.status==='ONGOING').length} | Completed: ${a.filter(p=>p.status==='COMPLETED').length} | On Hold: ${a.filter(p=>p.status==='ON-HOLD').length}\nPortfolio Value: ${fmtQ(tf)} | Outstanding Unpaid: ${fmtQ(tu)}\n\nONGOING PROJECTS:\n${a.filter(p=>p.status==='ONGOING').map(p=>`• ${p.projectNo} — ${p.projectName} [${p.progress}%] — ${p.client} — ${p.stage||'—'}`).join('\n')}\n\nUNPAID INVOICES:\n${a.filter(p=>p.unpaidInvoices>0).sort((a,b)=>b.unpaidInvoices-a.unpaidInvoices).map(p=>`• ${p.projectNo} — ${p.client} — ${fmtQ(p.unpaidInvoices)}`).join('\n')}`;
+  navigator.clipboard.writeText(txt).then(()=>toast('📋 Copied','Portfolio summary copied to clipboard')).catch(()=>alert(txt));
+}
+
+function clearUpd(){
+  if(!confirm('Reset all daily updates? This cannot be undone.'))return;
+  updates={};persist();rKPI();rCharts();rChips();render();
+  toast('↺ Reset','All updates cleared');
+}
+
+// TOAST
+function toast(title,msg){
+  document.getElementById('tTitle').textContent=title;
+  document.getElementById('tMsg').textContent=msg||'';
+  const t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// AI CHAT
+function ctxt(){
+  const a=all();
+  const sc={};a.forEach(p=>{sc[p.status]=(sc[p.status]||0)+1;});
+  return `You are a smart project management assistant for A. Hassan's architectural/engineering consultancy portfolio in Qatar.
+
+PORTFOLIO SUMMARY: ${a.length} projects | ${JSON.stringify(sc)} | Portfolio value: ${fmtQ(a.reduce((s,p)=>s+(p.contractFees||0),0))} | Unpaid: ${fmtQ(a.reduce((s,p)=>s+(p.unpaidInvoices||0),0))} | Avg progress: ${Math.round(a.reduce((s,p)=>s+p.progress,0)/a.length)}%
+
+FULL PROJECT DATA (id|projectNo|name|client|location|type|stage|status|progress|contractFees|unpaidInvoices|remainingFees|forecastedEnd|notes):
+${a.map(p=>`${p.id}|${p.projectNo}|${p.projectName}|${p.client}|${p.location}|${p.type}|${p.stage||''}|${p.status}|${p.progress}%|QAR${p.contractFees}|QAR${p.unpaidInvoices}|QAR${p.remainingFees}|${p.forecastedEnd||''}|${(p.notesActions||'').slice(0,120)}`).join('\n')}
+
+Be concise, precise, and actionable. Use bullet points for lists. Format currency as QAR. Bold important figures with **text**.`;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chatIn');
+  const msg=inp.value.trim();if(!msg)return;
+  inp.value='';addMsg(msg,'user');
+  const t=addTyping();
+  chatHist.push({role:'user',content:msg});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:ctxt(),messages:chatHist.slice(-12)})});
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Sorry, I could not generate a response.';
+    t.remove();addMsg(reply,'ai');
+    chatHist.push({role:'assistant',content:reply});
+  }catch(e){t.remove();addMsg('⚠ Unable to connect to AI. Please check your internet connection and try again.','ai');}
+}
+
+function sq(q){
+  document.getElementById('chatIn').value=q;
+  switchTab('chat',document.querySelectorAll('.nav-tab')[3]);
+  sendChat();
+}
+
+function addMsg(text,role){
+  const wrap=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className='msg msg-'+role;
+  d.innerHTML=role==='ai'?text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>'):text;
+  wrap.appendChild(d);wrap.scrollTop=wrap.scrollHeight;return d;
+}
+
+function addTyping(){
+  const wrap=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className='msg msg-ai';
+  d.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+  wrap.appendChild(d);wrap.scrollTop=wrap.scrollHeight;return d;
+}
+
+init();
+</script>
+</body>
+</html>
