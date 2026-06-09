@@ -18,6 +18,7 @@
   --red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;
   --purple:#7C3AED;--purple-bg:#F5F3FF;--purple-border:#DDD6FE;
   --gray:#6B7280;--gray-bg:#F9FAFB;--gray-border:#E5E7EB;
+  --teal:#0D9488;--teal-bg:#F0FDFA;--teal-border:#99F6E4;
   --r:10px;--r-lg:14px;--r-xl:18px;
   --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
   --shadow-lg:0 4px 6px rgba(0,0,0,0.05),0 10px 30px rgba(0,0,0,0.08);
@@ -61,6 +62,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .kpi-amber::after{background:linear-gradient(90deg,var(--amber),#FCD34D)}
 .kpi-red::after{background:linear-gradient(90deg,var(--red),#F87171)}
 .kpi-purple::after{background:linear-gradient(90deg,var(--purple),#A78BFA)}
+.kpi-teal::after{background:linear-gradient(90deg,var(--teal),#2DD4BF)}
 .kpi-label{font-size:11px;color:var(--text3);margin-bottom:6px}
 .kpi-val{font-size:28px;font-weight:300;letter-spacing:-1.5px;font-family:'Playfair Display',serif}
 .kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
@@ -115,6 +117,22 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 /* RESULT INFO */
 .result-info{font-size:12px;color:var(--text3);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
 .result-info b{color:var(--text2)}
+
+/* ── SECTION DIVIDER (Design / Supervision split) ── */
+.type-section-header{
+  display:flex;align-items:center;gap:10px;
+  margin:1.5rem 0 .75rem;
+  padding-bottom:.5rem;
+  border-bottom:2px solid var(--border);
+}
+.type-section-header .type-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 14px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.4px;
+}
+.tbadge-D{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
+.tbadge-S{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.type-section-header .ts-count{font-size:11px;color:var(--text3)}
+.type-section-header .ts-value{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-left:auto}
 
 /* CARD GRID */
 .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
@@ -181,6 +199,18 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .l-pct{font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
 .l-fees{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);text-align:right}
 .l-unpaid{font-family:'DM Mono',monospace;font-size:11px;text-align:right}
+
+/* LIST section divider */
+.l-section-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 14px;
+  background:var(--bg3);
+  border-bottom:1px solid var(--border);
+  font-size:11px;font-weight:600;color:var(--text2);
+  letter-spacing:.4px;
+  border-top:2px solid var(--border2);
+}
+.l-section-row:first-child{border-top:none}
 
 /* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(26,23,20,0.5);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
@@ -353,7 +383,12 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
     <span>Showing <b id="cnt">0</b> projects</span>
     <span id="updCnt" style="color:var(--gold)"></span>
   </div>
-  <div class="project-grid" id="pgrid"></div>
+  <!-- CARD VIEW: segregated by type -->
+  <div id="pgrid-wrap">
+    <div id="pgrid-D"></div>
+    <div id="pgrid-S"></div>
+  </div>
+  <!-- LIST VIEW: segregated by type -->
   <div class="project-list" id="plist">
     <div class="l-head">
       <div>#</div><div>Proj. No.</div><div>Project Name</div><div>Client</div>
@@ -531,7 +566,7 @@ function switchTab(name,el){
   if(name==='reports')rReport();
 }
 
-// KPI
+// KPI — now includes Total Remaining Contract Value card
 function rKPI(){
   const a=all(),n=a.length;
   const on=a.filter(p=>p.status==='ONGOING').length;
@@ -540,6 +575,7 @@ function rKPI(){
   const pend=a.filter(p=>p.status==='NOT YET STARTED').length;
   const tf=a.reduce((s,p)=>s+(p.contractFees||0),0);
   const tu=a.reduce((s,p)=>s+(p.unpaidInvoices||0),0);
+  const tr=a.reduce((s,p)=>s+(p.remainingFees||0),0);
   const ap=Math.round(a.reduce((s,p)=>s+p.progress,0)/n);
   const upd=Object.keys(updates).length;
   document.getElementById('kpiGrid').innerHTML=`
@@ -548,6 +584,7 @@ function rKPI(){
     <div class="kpi-card kpi-green"><div class="kpi-label">Completed + Closed</div><div class="kpi-val" style="color:var(--green)">${done}</div><div class="kpi-sub">${hold} on hold · ${pend} pending</div></div>
     <div class="kpi-card kpi-amber"><div class="kpi-label">Avg Progress</div><div class="kpi-val" style="color:${pc(ap)}">${ap}%</div><div class="kpi-sub">across all projects</div></div>
     <div class="kpi-card kpi-gold"><div class="kpi-label">Contract Portfolio</div><div class="kpi-val" style="color:var(--gold);font-size:22px">${fmtQ(tf)}</div><div class="kpi-sub">total contracted value</div></div>
+    <div class="kpi-card kpi-teal"><div class="kpi-label">Total Remaining Value</div><div class="kpi-val" style="color:var(--teal);font-size:22px">${fmtQ(tr)}</div><div class="kpi-sub">fees yet to be collected</div></div>
     <div class="kpi-card kpi-red"><div class="kpi-label">Unpaid Invoices</div><div class="kpi-val" style="color:${tu>0?'var(--red)':'var(--green)'};font-size:22px">${fmtQ(tu)}</div><div class="kpi-sub">pending collection</div></div>
   `;
 }
@@ -636,7 +673,7 @@ function setView(v){
   view=v;
   document.getElementById('vCard').classList.toggle('active',v==='card');
   document.getElementById('vList').classList.toggle('active',v==='list');
-  document.getElementById('pgrid').style.display=v==='card'?'grid':'none';
+  document.getElementById('pgrid-wrap').style.display=v==='card'?'block':'none';
   document.getElementById('plist').style.display=v==='list'?'flex':'none';
   render();
 }
@@ -651,43 +688,92 @@ function filtered(){
   return list;
 }
 
-// RENDER
+// Card HTML builder
+function cardHTML(p){
+  const iu=!!updates[p.id],hu=p.unpaidInvoices>0,sl=p.status==='NOT YET STARTED'?'PENDING':p.status;
+  return `<div class="project-card ${SC[p.status]||'s-closed'}" onclick="openUpd(${p.id})">
+    <div class="card-head">
+      <div class="card-meta">
+        <div class="card-no">${p.projectNo}<span class="ctag">${p.client}</span>${iu?'<span class="udot"></span>':''}</div>
+        <div class="card-name">${p.projectName}</div>
+      </div>
+      <div class="sbadge sb-${p.status.replace(/\s/g,'-')}">${sl}</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span class="prog-lbl">Progress</span><span class="prog-pct">${p.progress}%</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${p.progress}%;background:${pc(p.progress)}"></div></div>
+    </div>
+    <div class="card-details">
+      <div><div class="d-key">Location</div><div class="d-val">${p.location||'—'}</div></div>
+      <div><div class="d-key">Type / Stage</div><div class="d-val"><span class="tpill type-${p.type}">${p.type||'—'}</span>${p.stage?' · '+p.stage:''}</div></div>
+      <div><div class="d-key">Fees Status</div><div class="d-val">${p.feesStatus||'—'}</div></div>
+      <div><div class="d-key">Duration</div><div class="d-val">${p.duration?p.duration+' mo.':'TBD'}</div></div>
+    </div>
+    <div class="card-notes${iu?' upd':''}">${p.notesActions||'No notes yet.'}</div>
+    <div class="card-footer">
+      <div class="c-fees">Contract: <b>${fmtQ(p.contractFees)}</b></div>
+      <div class="c-unpaid ${hu?'u-warn':'u-ok'}">${hu?'⚠ '+fmtQ(p.unpaidInvoices)+' unpaid':p.remainingFees>0?fmtQ(p.remainingFees)+' remaining':'✓ Settled'}</div>
+    </div>
+  </div>`;
+}
+
+// RENDER — segregated by type
 function render(){
   const list=filtered();
   document.getElementById('cnt').textContent=list.length;
   const upd=Object.keys(updates).length;
   document.getElementById('updCnt').textContent=upd>0?upd+' projects updated today':'';
+
   if(view==='card'){
-    if(!list.length){document.getElementById('pgrid').innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><h3>No projects found</h3><p>Try adjusting your search or filters.</p></div>`;return;}
-    document.getElementById('pgrid').innerHTML=list.map(p=>{
-      const iu=!!updates[p.id],hu=p.unpaidInvoices>0,sl=p.status==='NOT YET STARTED'?'PENDING':p.status;
-      return `<div class="project-card ${SC[p.status]||'s-closed'}" onclick="openUpd(${p.id})">
-        <div class="card-head">
-          <div class="card-meta">
-            <div class="card-no">${p.projectNo}<span class="ctag">${p.client}</span>${iu?'<span class="udot"></span>':''}</div>
-            <div class="card-name">${p.projectName}</div>
-          </div>
-          <div class="sbadge sb-${p.status.replace(/\s/g,'-')}">${sl}</div>
+    const dList=list.filter(p=>p.type==='D');
+    const sList=list.filter(p=>p.type==='S');
+
+    // Design section
+    const dWrap=document.getElementById('pgrid-D');
+    if(dList.length>0){
+      const dVal=dList.reduce((s,p)=>s+(p.remainingFees||0),0);
+      dWrap.innerHTML=`
+        <div class="type-section-header">
+          <span class="type-badge tbadge-D">✏️ Design</span>
+          <span class="ts-count">${dList.length} project${dList.length!==1?'s':''}</span>
+          <span class="ts-value">Remaining: <b style="color:var(--teal);font-family:'DM Mono',monospace">${fmtQ(dVal)}</b></span>
         </div>
-        <div class="prog-wrap">
-          <div class="prog-head"><span class="prog-lbl">Progress</span><span class="prog-pct">${p.progress}%</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:${p.progress}%;background:${pc(p.progress)}"></div></div>
+        <div class="project-grid">${dList.map(p=>cardHTML(p)).join('')}</div>`;
+    } else {
+      dWrap.innerHTML=`
+        <div class="type-section-header">
+          <span class="type-badge tbadge-D">✏️ Design</span>
+          <span class="ts-count">0 projects</span>
         </div>
-        <div class="card-details">
-          <div><div class="d-key">Location</div><div class="d-val">${p.location||'—'}</div></div>
-          <div><div class="d-key">Type / Stage</div><div class="d-val"><span class="tpill type-${p.type}">${p.type||'—'}</span>${p.stage?' · '+p.stage:''}</div></div>
-          <div><div class="d-key">Fees Status</div><div class="d-val">${p.feesStatus||'—'}</div></div>
-          <div><div class="d-key">Duration</div><div class="d-val">${p.duration?p.duration+' mo.':'TBD'}</div></div>
+        <div class="project-grid"><div class="empty"><div class="empty-ico">🔍</div><h3>No design projects match</h3><p>Try adjusting your search or filters.</p></div></div>`;
+    }
+
+    // Supervision section
+    const sWrap=document.getElementById('pgrid-S');
+    if(sList.length>0){
+      const sVal=sList.reduce((s,p)=>s+(p.remainingFees||0),0);
+      sWrap.innerHTML=`
+        <div class="type-section-header">
+          <span class="type-badge tbadge-S">👁️ Supervision</span>
+          <span class="ts-count">${sList.length} project${sList.length!==1?'s':''}</span>
+          <span class="ts-value">Remaining: <b style="color:var(--teal);font-family:'DM Mono',monospace">${fmtQ(sVal)}</b></span>
         </div>
-        <div class="card-notes${iu?' upd':''}">${p.notesActions||'No notes yet.'}</div>
-        <div class="card-footer">
-          <div class="c-fees">Contract: <b>${fmtQ(p.contractFees)}</b></div>
-          <div class="c-unpaid ${hu?'u-warn':'u-ok'}">${hu?'⚠ '+fmtQ(p.unpaidInvoices)+' unpaid':p.remainingFees>0?fmtQ(p.remainingFees)+' remaining':'✓ Settled'}</div>
+        <div class="project-grid">${sList.map(p=>cardHTML(p)).join('')}</div>`;
+    } else {
+      sWrap.innerHTML=`
+        <div class="type-section-header">
+          <span class="type-badge tbadge-S">👁️ Supervision</span>
+          <span class="ts-count">0 projects</span>
         </div>
-      </div>`;
-    }).join('');
+        <div class="project-grid"><div class="empty"><div class="empty-ico">🔍</div><h3>No supervision projects match</h3><p>Try adjusting your search or filters.</p></div></div>`;
+    }
+
   } else {
-    document.getElementById('lbody').innerHTML=list.map((p,i)=>{
+    // LIST VIEW: Design rows then Supervision rows
+    const dList=list.filter(p=>p.type==='D');
+    const sList=list.filter(p=>p.type==='S');
+    let rowIdx=0;
+    const rowHTML=(p,i)=>{
       const sl=p.status==='NOT YET STARTED'?'PENDING':p.status;
       return `<div class="l-row" onclick="openUpd(${p.id})">
         <div class="l-sn">${i+1}</div>
@@ -699,7 +785,18 @@ function render(){
         <div class="l-fees">${fmtQ(p.contractFees)}</div>
         <div class="l-unpaid" style="color:${p.unpaidInvoices>0?'var(--red)':'var(--text3)'}">${p.unpaidInvoices>0?fmtQ(p.unpaidInvoices):'—'}</div>
       </div>`;
-    }).join('');
+    };
+    let html='';
+    if(dList.length){
+      html+=`<div class="l-section-row"><span class="type-badge tbadge-D" style="font-size:11px;padding:2px 10px">✏️ Design</span><span style="color:var(--text3);font-size:11px;margin-left:6px">${dList.length} projects</span></div>`;
+      html+=dList.map((p,i)=>rowHTML(p,i+1)).join('');
+    }
+    if(sList.length){
+      html+=`<div class="l-section-row"><span class="type-badge tbadge-S" style="font-size:11px;padding:2px 10px">👁️ Supervision</span><span style="color:var(--text3);font-size:11px;margin-left:6px">${sList.length} projects</span></div>`;
+      html+=sList.map((p,i)=>rowHTML(p,i+1)).join('');
+    }
+    if(!html) html=`<div style="text-align:center;padding:3rem;color:var(--text3)">No projects match your search or filter.</div>`;
+    document.getElementById('lbody').innerHTML=html;
   }
 }
 
